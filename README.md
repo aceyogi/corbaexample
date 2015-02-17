@@ -138,14 +138,14 @@ public class Server {
 			rootpoa.the_POAManager().activate();
 
 			// 3. Create servant and register it with the ORB.
-			AddressBookImpl contactsImpl = new AddressBookImpl();
-			org.omg.CORBA.Object ref = rootpoa.servant_to_reference(contactsImpl);
-			AddressBook contactsRef = AddressBookHelper.narrow(ref);
+			AddressBookImpl addressBookImpl = new AddressBookImpl();
+			org.omg.CORBA.Object ref = rootpoa.servant_to_reference(addressBookImpl);
+			AddressBook addressBookRef = AddressBookHelper.narrow(ref);
 
 			// 4. Bind reference with NameService.
 			NamingContext namingContext = NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
 			NameComponent[] nc = { new NameComponent("AddressBook", "") };
-			namingContext.rebind(nc, contactsRef);
+			namingContext.rebind(nc, addressBookRef);
 
 			// 5. Run the ORB and wait for client calls.
 			System.out.println("Address Book Server running...");
@@ -285,13 +285,22 @@ For development purposes, you can start two ORBs on a single machine as follows:
 
 Instead of using the Name Service, you may want to resolve a reference to a distributed object directly from its IOR.
 
-1. Modify the **Server** class to comment out the lines that register the Address Book with the Name Service. Instead, print out the Address Book's IOR to the console.
+1. Modify the **Server** class to comment out the lines that register the Address Book with the Name Service. Instead, print out the Address Book's IOR to the console. You'll need to use the following method.
 
-2. Modify the **Client** class to accept an IOR as an argument from the command line. Comment out the lines that lookup the Address Book via the Naming Service, and instead using the IOR to resolve the reference.
+```java
+orb.object_to_string(addressBook);
+```
+
+2. Modify the **Client** class to accept an IOR as an argument from the command line. Comment out the lines that lookup the Address Book via the Naming Service (or add a control statement), and instead use the IOR to resolve the reference.
+
+```java
+serverOrb.string_to_object(ior);
+```
+
 
 ## A final exercise... using DSI
 
-Finally, we'll illustrate an alternative to implementing the Servant class without that uses the Dynamic Skeleton Interface (DSI) instead of the POA model.  DSI allows us to provide an implementation of the Address Book without any of the types generated from the mapping (**Person** **UnknownNameException**, etc.). This would be very useful were we to implement the server in a language with no concept of objects.
+Finally, we'll illustrate an alternative to implementing the Servant class without that uses the Dynamic Skeleton Interface (DSI) instead of the POA model.  DSI allows us to provide an implementation of the Address Book without any of the types generated from the mapping (**Person**, **UnknownNameException**, etc.). This would be useful had we to implement the server in a language with no concept of objects.
 
 The example given below provides a basic implementation of *lookupEmailFromName()* method. It's useful to work through it to make sure you understand what's going on. If you want to take the next steps to implement the other methods, you'll likely need to spend some time familiarising yourself with the API.
 
@@ -299,7 +308,7 @@ Carry out the following steps:
 
 1. Create a new class **DSIAddressBookImpl**, using the template below.
 
-```
+```java
 package org.example.corba;
 
 public class DSIAddressBookImpl extends DynamicImplementation {
