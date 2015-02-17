@@ -48,7 +48,6 @@ module org {
 
 ```
 idlj addressbook.idl
-
 ```
 
 4. Using the *-fall* flag instructs the compiler to generate both the client-side stub and server-side skeleton mappings along with the AddressBook interface and helper classes.
@@ -218,7 +217,7 @@ orbd -ORBInitialPort 1050 -ORBInitialHost localhost
 java org.example.corba.Server
 ```
 
-3. Finally, from another terminal window, navigate again to the project **bin** director and start the client.
+3. Finally, from another terminal window, navigate again to the project **bin** directory and start the client.
 
 ```
 java org.example.corba.Client
@@ -234,9 +233,9 @@ In the remainder of the class we'll develop and discuss how to extend the exampl
 
  2. Modify the IDL file to create a **Person** interface, with accessors for name and email address. Use the same approach as for the AddressBook, to create a simple implementation (**PersonImpl.java**).
 
- 3. Modify the *addContact(...)* method from step 1 to accept a **Person** object as a parameter instead. Make the necessary updates to the client to use this method.  Within the client you will need to use the *rootPOA.servant_to_reference(...)* method, followed by *PersonHelper.narrow(...)* on the result to obtain an object of type **Person**.
+ 3. Modify the *addContact(...)* method from step 1 to accept a **Person** object as a parameter instead. Make the necessary updates to the **Client** to use this method.  Within the **Client** you will need to use the *rootPOA.servant_to_reference(...)* method, followed by *PersonHelper.narrow(...)* on the result to obtain an object of type **Person**.
 
 
-## As example using DSI.
+## As example using DSI
 
 To be added...
