@@ -237,7 +237,7 @@ In the remainder of the class we'll develop and discuss how to extend the exampl
 
 (Extra: You may wish to investigate how to realise an *addPeople(...)* method, using the IDL concept of a *sequence*).
 
-Your final  **Client** class should have a structure similar to the following.
+Your final **Client** class should have a structure similar to the following.
 
 ```java
 package org.example.corba;
@@ -268,19 +268,7 @@ public class Server {
 }
 ```
 
-## An example using DSI
-
-To be added...
-
-## Using IORs directly
-
-It may be the case that instead of using the Name Service, you may want to resolve a reference to a distributed object directly from its IOR.
-
-1. Modify the **Server** class to comment out the lines that register the Address Book with the Name Service. Instead, print out the Address Book's IOR to the console.
-
-2. Modify the **Client** class to accept an IOR as an argument from the command line. Comment out the lines that lookup the Address Book via the Naming Service, and instead using the IOR to resolve the reference.
-
-## And finally...
+## Running the example using multiple ORBs (on multiple machines)
 
 Throughout this exercise we've developed all the examples using a reference to a single, locally running ORB. If you've time (or in your spare time), team up with somebody to run the examples across multiple machines.
 
@@ -292,4 +280,133 @@ For development purposes, you can start two ORBs on a single machine as follows:
 > orbd -port 1049 -ORBInitialHost localhost -ORBInitialPort 1050 &
 > orbd -port 1051 -ORBInitialHost localhost -ORBInitialPort 1052 &
 ```
+
+## Using IORs directly
+
+Instead of using the Name Service, you may want to resolve a reference to a distributed object directly from its IOR.
+
+1. Modify the **Server** class to comment out the lines that register the Address Book with the Name Service. Instead, print out the Address Book's IOR to the console.
+
+2. Modify the **Client** class to accept an IOR as an argument from the command line. Comment out the lines that lookup the Address Book via the Naming Service, and instead using the IOR to resolve the reference.
+
+## A final exercise... using DSI
+
+Finally, we'll illustrate an alternative to implementing the Servant class without that uses the Dynamic Skeleton Interface (DSI) instead of the POA model.  DSI allows us to provide an implementation of the Address Book without any of the types generated from the mapping (**Person** **UnknownNameException**, etc.). This would be very useful were we to implement the server in a language with no concept of objects.
+
+The example given below provides a basic implementation of *lookupEmailFromName()* method. It's useful to work through it to make sure you understand what's going on. If you want to take the next steps to implement the other methods, you'll likely need to spend some time familiarising yourself with the API.
+
+Carry out the following steps:
+
+1. Create a new class **DSIAddressBookImpl**, using the template below.
+
+```
+package org.example.corba;
+
+public class DSIAddressBookImpl extends DynamicImplementation {
+
+	/**
+	 * Map from names to email addresses.
+	 */
+	private Map<String, String> contacts = new HashMap<String, String>();
+
+	/**
+	 * Reference to the ORB that manages this object.
+	 */
+	private ORB orb;
+
+	/**
+	 * Constructor: Adds some default entries to the address book.
+	 */
+	public DSIAddressBookImpl(ORB orb) {
+		this.orb = orb;
+		contacts.put("Bob", "bob@example.com");
+		contacts.put("Alice", "alice@example.com");
+		contacts.put("Mary", "mary@example.com");
+	}
+
+	/**
+	 * Receives all requests and handles dispatch to handler methods.
+	 * 
+	 * @param req
+	 *            the server request.
+	 */
+	public void invoke(ServerRequest req) {
+		// Extract method name from request
+		String op = req.operation();
+		
+		// Use a case statment to dispatch the request to a handler method.
+		switch (op) {
+		case "lookupEmailFromName":
+			methodLookupEmailFromName(req);
+			break;
+		case "lookupNameFromEmail":
+			methodLookupnameFromEmail(req);
+			break;
+		default:
+			throw new org.omg.CORBA.BAD_OPERATION();
+		}
+	}
+
+	/**
+	 * Processes a server request to lookup an email address from a name.
+	 * 
+	 * @param request
+	 *            the server request.
+	 */
+	private void methodLookupEmailFromName(ServerRequest request) {
+		
+		// We expect a single argument of type String
+		NVList args = orb.create_list(1);
+		Any arg = orb.create_any();
+		arg.type(orb.get_primitive_tc(TCKind.tk_string));
+		args.add_value("", arg, ARG_IN.value);
+		
+		// Extract the argument from the request
+		request.arguments(args);
+		String name = arg.extract_string();
+		
+		// Create the result object
+		Any result = orb.create_any();
+		
+		// Execute the operation
+		if (contacts.containsKey(name)) {
+			String email = contacts.get(name);
+			// Set the result 
+			result.insert_string(email);
+			request.set_result(result);
+		} else {
+			// Raise an exception (without use of the generated exception class)
+			StructMember[] members = new org.omg.CORBA.StructMember[0];
+			TypeCode typeCode = org.omg.CORBA.ORB.init().create_exception_tc(
+					"IDL:org/example/corba/UnknownNameException:1.0",
+					"UnknownNameException", members);
+			OutputStream out = result.create_output_stream();
+			out.write_string("IDL:org/example/corba/UnknownNameException:1.0");
+			result.type(typeCode);
+			result.read_value(out.create_input_stream(), typeCode);
+			request.set_exception(result);
+		}
+	}
+	
+	/**
+	* The intefaces implemented by this DSI implementation.
+	*/
+	public String[] _all_interfaces(POA poa, byte[] oid) {
+		return new String[] { "IDL:org/example/corba/AddressBook:1.0" };
+	}
+}
+```
+
+2\. Modify the **Server** class to create an instance of the **DSIAddressBookImpl** class, and register it with the Name Service using the name "DSIAddressBook"
+
+3\. Modify the **Client** class to lookup "DSIAddressBook" instead of the standard address book.
+
+4\. In the Client class, comment out all calls to the AddressBook object, with the exception of the initial call to *lookupEmailFromName()*.
+
+5\. Run the example and check that the correct result is returned, using the DSI server implementation.
+
+6\. If you feel inclined to do so, modify **DSIAddressBookImpl** to implement the remaining methods. Uncomment the relevant lines in the **Client** as you go to test that your implementation works.  In carrying this out you'll likely need to research Java's DSI API in more detail. 
+
+
+
 
