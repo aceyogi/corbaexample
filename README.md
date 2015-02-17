@@ -211,7 +211,6 @@ public class Client {
 
 ```
 orbd -ORBInitialPort 1050 -ORBInitialHost localhost
-
 ```
 
 2. From another terminal / command prompt, navigate to the project **bin** directory, and start the server.
