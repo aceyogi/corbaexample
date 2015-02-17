@@ -164,14 +164,14 @@ public class Server {
 }
 ```
 
-## Implementing the client.
+## Implementing the client
 
 Next, we need to write a client class, which will:
 
  1. Use the Name Service of the ORB to obtain a reference to the AddressBook object.
  2. Query the Address Book.
 
-```
+```java
 package org.example.corba;
 
 public class Client {
