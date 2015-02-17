@@ -208,19 +208,19 @@ public class Client {
  1. First, we need to run the Java IDL Object Request Broker Daemon to allow us to register and lookup objects. Start the daemon using the following command.
 
 ```
-orbd -ORBInitialPort 1050 -ORBInitialHost localhost
+> orbd -ORBInitialPort 1050 -ORBInitialHost localhost
 ```
 
 2. From another terminal / command prompt, navigate to the project **bin** directory, and start the server.
 
 ```
-java org.example.corba.Server
+> java org.example.corba.Server
 ```
 
 3. Finally, from another terminal window, navigate again to the project **bin** directory and start the client.
 
 ```
-java org.example.corba.Client
+> java org.example.corba.Client
 ```
 
 If all goes well, you should see the results of the queries printed to the console.
