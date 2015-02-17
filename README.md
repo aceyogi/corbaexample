@@ -109,7 +109,7 @@ public class AddressBookImpl extends AddressBookPOA {
 }
 ```
 
-## Implementing the Server
+## Implementing the server
 
 Next, we need to write a server class, which is responsible for:
    1. Creating the Object Request Broker (ORB) and activating the POA Manager.
@@ -189,12 +189,12 @@ public class Client {
 			
 			// 3. Lookup reference to the Address Book.
 			org.omg.CORBA.Object adressBookRef = ncRef.resolve_str("AddressBook");
-			AddressBook contactsImpl = AddressBookHelper.narrow(adressBookRef);
+			AddressBook addressBook = AddressBookHelper.narrow(adressBookRef);
             System.out.println("Obtained a handle on Address Book object...");
 
 			// 4. Execute queries.
-			System.out.println(contactsImpl.lookupEmailFromName("Bob"));
-			System.out.println(contactsImpl.lookupNameFromEmail("mary@example.com"));
+			System.out.println(addressBook.lookupEmailFromName("Bob"));
+			System.out.println(addressBook.lookupNameFromEmail("mary@example.com"));
 		} catch (Exception e) {
 			System.out.println("ERROR : " + e);
 			e.printStackTrace(System.out);
@@ -203,12 +203,12 @@ public class Client {
 }
 ```
 
-## Putting it Together
+## Putting it together
 
  1\. First, we need to run the Java IDL Object Request Broker Daemon to allow us to register and lookup objects. By default, the daemon will create the directory *orb.db* for its persistent storage. Start the daemon using the following command.
 
 ```
-> orbd -ORBInitialPort 1050 -ORBInitialHost localhost
+> orbd -port 1049 -ORBInitialHost localhost -ORBInitialPort 1050 
 ```
 
 2\. From another terminal / command prompt, navigate to the project **bin** directory, and start the server.
@@ -268,7 +268,28 @@ public class Server {
 }
 ```
 
-
 ## An example using DSI
 
 To be added...
+
+## Using IORs directly
+
+It may be the case that instead of using the Name Service, you may want to resolve a reference to a distributed object directly from its IOR.
+
+1. Modify the **Server** class to comment out the lines that register the Address Book with the Name Service. Instead, print out the Address Book's IOR to the console.
+
+2. Modify the **Client** class to accept an IOR as an argument from the command line. Comment out the lines that lookup the Address Book via the Naming Service, and instead using the IOR to resolve the reference.
+
+## And finally...
+
+Throughout this exercise we've developed all the examples using a reference to a single, locally running ORB. If you've time (or in your spare time), team up with somebody to run the examples across multiple machines.
+
+Ensure that the **AddressBook** and **Person** objects are registered on different ORBs (running on different machines). You'll need to modify the **Client** code to achieve this.
+
+For development purposes, you can start two ORBs on a single machine as follows:
+
+```
+> orbd -port 1049 -ORBInitialHost localhost -ORBInitialPort 1050 &
+> orbd -port 1051 -ORBInitialHost localhost -ORBInitialPort 1052 &
+```
+
