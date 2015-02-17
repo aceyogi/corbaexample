@@ -44,13 +44,13 @@ module org {
 };
 ```
 
-3/. Open up a terminal and navigate to the **src-generated** directory. From here, we're going to generate the IDL mapping to Java using the idlj compiler, like so:
+3\. Open up a terminal and navigate to the **src-generated** directory. From here, we're going to generate the IDL mapping to Java using the idlj compiler, like so:
 
 ```
 > idlj -fall addressbook.idl
 ```
 
-4/. Using the *-fall* flag instructs the compiler to generate both the client-side stub and server-side skeleton mappings along with the AddressBook interface and helper classes.
+4\. Using the *-fall* flag instructs the compiler to generate both the client-side stub and server-side skeleton mappings along with the AddressBook interface and helper classes.
 
 
 ## Implementing the Address Book
@@ -205,19 +205,19 @@ public class Client {
 
 ## Putting it Together
 
- 1/. First, we need to run the Java IDL Object Request Broker Daemon to allow us to register and lookup objects. Start the daemon using the following command.
+ 1\. First, we need to run the Java IDL Object Request Broker Daemon to allow us to register and lookup objects. Start the daemon using the following command.
 
 ```
 > orbd -ORBInitialPort 1050 -ORBInitialHost localhost
 ```
 
-2/. From another terminal / command prompt, navigate to the project **bin** directory, and start the server.
+2\. From another terminal / command prompt, navigate to the project **bin** directory, and start the server.
 
 ```
 > java org.example.corba.Server
 ```
 
-3/. Finally, from another terminal window, navigate again to the project **bin** directory and start the client.
+3\. Finally, from another terminal window, navigate again to the project **bin** directory and start the client.
 
 ```
 > java org.example.corba.Client
