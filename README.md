@@ -3,10 +3,9 @@
 This short example will give you a basic introduction to Java IDL, Java's technology for distributed objects based on CORBA.
 
 The example is of a shared Address Book running on a server, and we'll implement functionality to:
-  1. Add new contact information from a remote client;
-  2. Query the address book from a remote client;
-  3. Illustrate the Dynamic Skeleton Interface: servicing a request server-side without creating an object;
-  4. Listen for updates to the address book using the Observer pattern.
+  1. Query the address book from a remote client;
+  2. Add new contact information from a remote client;
+  3. Illustrate the Dynamic Skeleton Interface: servicing a request server-side without creating a servant object;
 
 The setup described below assumes that you're using Eclipse. 
 
@@ -233,9 +232,11 @@ In the remainder of the class we'll develop and discuss how to extend the exampl
 
  1. Add an *addContact(...)* method to the address book interface, to support the addition of new contacts through the passing a name and email address as parameters. Modify the client to use this interface and check it works by using the query methods as before.
 
- 2. Modify the IDL file to create a **Person** interface, with accessors for name and email address. Using the same approach as for the AddressBook, create a simple implementation (**PersonImpl.java**).
+ 2. Modify the IDL file to create a **Person** interface, with accessors for name and email address. Use the same approach as for the AddressBook, to create a simple implementation (**PersonImpl.java**).
 
- 3. Modify the *addContact(...)* method from step 1 to accept a **Person** object as a parameter instead. Make the necessary updates to the client to use this method.  Within the client you will need to use the *rootPOA.servant_to_reference(...)*, followed by *PersonHelper.narrow(...)* to obtain an object of type **Person**.
+ 3. Modify the *addContact(...)* method from step 1 to accept a **Person** object as a parameter instead. Make the necessary updates to the client to use this method.  Within the client you will need to use the *rootPOA.servant_to_reference(...)* method, followed by *PersonHelper.narrow(...)* on the result to obtain an object of type **Person**.
 
 
 ## As example using DSI.
+
+To be added...
