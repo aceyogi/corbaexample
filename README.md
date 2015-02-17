@@ -412,7 +412,7 @@ public class DSIAddressBookImpl extends DynamicImplementation {
 
 4\. In the Client class, comment out all calls to the AddressBook object, with the exception of the initial call to *lookupEmailFromName()*.
 
-5\. Run the example and check that the correct result is returned, using the DSI server implementation.
+5\. Run the example and check that the correct result is returned.
 
 6\. If you feel inclined to do so, modify **DSIAddressBookImpl** to implement the remaining methods. Uncomment the relevant lines in the **Client** as you go to test that your implementation works.  In carrying this out you'll likely need to research Java's DSI API in more detail. 
 
