@@ -1,6 +1,6 @@
 # A brief introduction to Java IDL
 
-This short example will give you a basic introduction to Java IDL, Java's technology for distributed objects based on CORBA.
+This short example will give you a basic introduction to Java IDL, Java's technology for distributed objects based on CORBA. **The example code will be added to this repository later in the week**.
 
 The example is of a shared Address Book running on a server, and we'll implement functionality to:
   1. Query the address book from a remote client;
@@ -234,6 +234,8 @@ In the remainder of the class we'll develop and discuss how to extend the exampl
  2. Modify the IDL file to create a **Person** interface, with accessors for name and email address. Use the same approach as for the AddressBook, to create a simple implementation (**PersonImpl.java**).
 
  3. Modify the *addContact(...)* method from step 1 to accept a **Person** object as a parameter instead. Make the necessary updates to the **Client** to use this method.  Within the **Client** you will need to use the *rootPOA.servant_to_reference(...)* method, followed by *PersonHelper.narrow(...)* on the result to obtain an object of type **Person**.
+
+(Extra: You may wish to investigate how to realise an *addPeople(...)* method, using the IDL concept of a *sequence*).
 
 
 ## As example using DSI
