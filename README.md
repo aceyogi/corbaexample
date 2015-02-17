@@ -348,9 +348,9 @@ public class DSIAddressBookImpl extends DynamicImplementation {
 		case "lookupEmailFromName":
 			methodLookupEmailFromName(req);
 			break;
-		case "lookupNameFromEmail":
-			methodLookupnameFromEmail(req);
-			break;
+		// case "lookupNameFromEmail":
+		// methodLookupnameFromEmail(req);
+		// break;
 		default:
 			throw new org.omg.CORBA.BAD_OPERATION();
 		}
