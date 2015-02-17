@@ -132,9 +132,10 @@ public class Server {
 			props.put("org.omg.CORBA.ORBInitialHost", "localhost");
 			ORB orb = ORB.init(args, props);
 			System.out.println("Initialized ORB");
-
-			// 2. Get reference to root POA.
+			
+			// 2. Get reference to root POA and activate the POA manager.
 			POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+			rootpoa.the_POAManager().activate();
 
 			// 3. Create servant and register it with the ORB.
 			AddressBookImpl contactsImpl = new AddressBookImpl();
@@ -148,7 +149,6 @@ public class Server {
 
 			// 5. Run the ORB and wait for client calls.
 			System.out.println("Address Book Server running...");
-			rootpoa.the_POAManager().activate();
 			orb.run();
 		}
 
@@ -205,7 +205,7 @@ public class Client {
 
 ## Putting it Together
 
- 1\. First, we need to run the Java IDL Object Request Broker Daemon to allow us to register and lookup objects. Start the daemon using the following command.
+ 1\. First, we need to run the Java IDL Object Request Broker Daemon to allow us to register and lookup objects. By default, the daemon will create the directory *orb.db* for its persistent storage. Start the daemon using the following command.
 
 ```
 > orbd -ORBInitialPort 1050 -ORBInitialHost localhost
@@ -237,7 +237,38 @@ In the remainder of the class we'll develop and discuss how to extend the exampl
 
 (Extra: You may wish to investigate how to realise an *addPeople(...)* method, using the IDL concept of a *sequence*).
 
+Your final  **Client** class should have a structure similar to the following.
 
-## As example using DSI
+```java
+package org.example.corba;
+
+public class Server {
+
+	public static void main(String args[]) {
+		try {
+			// 1. Set server location and initialise ORB.
+			
+			// 2. Get the root naming context
+			
+			// 3. Lookup reference to the Address Book.
+			
+			// 4. Execute queries.
+			
+			// 5. Get reference to root POA and activate the POA manager.
+			
+			// 6. Create new people	and resolve to `Person' references		
+			
+			// 7. Add people using the addPerson() and addPeople() methods.
+			
+			// 8. Query for details of the newly added people.
+		} catch (Exception e) {
+			// Handle Exceptions.
+		}
+	}
+}
+```
+
+
+## An example using DSI
 
 To be added...
