@@ -47,7 +47,7 @@ module org {
 3. Open up a terminal and navigate to the **src-generated** directory. From here, we're going to generate the IDL mapping to Java using the idlj compiler, like so:
 
 ```
-idlj addressbook.idl
+> idlj -fall addressbook.idl
 ```
 
 4. Using the *-fall* flag instructs the compiler to generate both the client-side stub and server-side skeleton mappings along with the AddressBook interface and helper classes.
