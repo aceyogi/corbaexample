@@ -5,7 +5,9 @@ This short example will give you a basic introduction to Java IDL, Java's techno
 The example is of a shared Address Book running on a server, and we'll implement functionality to:
   1. Query the address book from a remote client;
   2. Add new contact information from a remote client;
-  3. Illustrate the Dynamic Skeleton Interface: servicing a request server-side without creating a servant object;
+  3. Run the example across multiple distributed machines;
+  4. Lookup the Address Book using its IOR.
+  5. Illustrate the Dynamic Skeleton Interface: servicing a request server-side without creating a servant object;
 
 The setup described below assumes that you're using Eclipse. 
 
