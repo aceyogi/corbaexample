@@ -306,7 +306,7 @@ The example given below provides a basic implementation of *lookupEmailFromName(
 
 Carry out the following steps:
 
-1. Create a new class **DSIAddressBookImpl**, using the template below.
+1. Create a new class **DSIAddressBookImpl**, using the template below. Note that the class should extend *org.omg.PortableServer.DynamicImplementation*, not *org.omg.CORBA.DynamicImplementation*, which is  deprecated.
 
 ```java
 package org.example.corba;
